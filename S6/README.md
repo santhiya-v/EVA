@@ -9,6 +9,10 @@
 8. Ghost Batch Normaliztion with L1 & L2 Loss (L1_L2_GBN)
 
 # Validation Accuracy Change Graph
+![validation accuracy](https://github.com/santhiya-v/EVA/blob/master/S6/validation_accuracy.png)
 # Loss Change Graph
+![validation loss](https://github.com/santhiya-v/EVA/blob/master/S6/validation_loss.png)
 # 25 Misclassified Images plot for without L1/L2 with BN (BN)
+![BN misclassified](https://github.com/santhiya-v/EVA/blob/master/S6/BN_misclassified.png)
 # 25 Misclassified Images plot for without L1/L2 with GBN (GBN)
+![GBN misclassified](https://github.com/santhiya-v/EVA/blob/master/S6/GBN_misclassified.png)
