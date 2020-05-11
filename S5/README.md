@@ -1,4 +1,4 @@
-# S5 Assignment
+# MNIST - Hand written digits Recognition
 
 ## Goal 
 To train MNIST model and achieve test accuracy of 99.4%.
