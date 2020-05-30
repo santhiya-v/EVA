@@ -5,7 +5,7 @@ dropout_value = 0.1
 num_splits = 2 
 class CustomModel(nn.Module):
     def __init__(self):
-        super(Net, self).__init__()
+        super(CustomModel, self).__init__()
 
         # CONVOLUTION BLOCK 1
         self.convblock1 = nn.Sequential(
