@@ -1,6 +1,7 @@
 import torch
 import torchvision
 import torchvision.transforms as transforms
+import numpy as np
 
 
 def getDataLoaderArgs(batchSize):
@@ -20,24 +21,20 @@ def getDataLoaderArgs(batchSize):
   dataloader_args = dict(shuffle=True, batch_size=BATCH_SIZE, num_workers=4, pin_memory=True) if cuda else dict(shuffle=True, batch_size=64)
   return dataloader_args
 
-def getTrainDataLoader(dataloader_args, rotation=0, verticalFlip=0, horizontalFlip=0):
-  transform = transforms.Compose(
-    [transforms.RandomRotation((-rotation, rotation)),
-     transforms.RandomVerticalFlip(p=verticalFlip),
-     transforms.RandomHorizontalFlip(p=horizontalFlip),
-     transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-  trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-                                        download=True, transform=transform)
+def getTrainDataLoader(type, dataloader_args, data_transforms):
+  trainloader = []
+  if type == 'CIFAR':
+        trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
+                                                download=True, transform=data_transforms)
   trainloader = torch.utils.data.DataLoader(trainset, **dataloader_args)
   return trainloader
 
-def getTestDataLoader(dataloader_args):
-  transform = transforms.Compose(
-    [transforms.ToTensor(),
-     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-  testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-                                       download=True, transform=transform)
+def getTestDataLoader(type, dataloader_args, data_transforms):
+  testloader = []
+  if type == 'CIFAR':
+
+    testset = torchvision.datasets.CIFAR10(root='./data', train=False,
+                                        download=True, transform=data_transforms)
   testloader = torch.utils.data.DataLoader(testset, **dataloader_args)
   return testloader
