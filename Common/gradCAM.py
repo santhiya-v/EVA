@@ -181,7 +181,7 @@ def getGradCamOutput(modelClass, modelType, modelPath, target_layer, images, tit
     model.eval()
     gradcam = GradCAM.from_config(model_type=modelType, arch=model, layer_name=target_layer)
     
-    fig3 = plt.figure(figsize = (35,20))
+    fig3 = plt.figure(figsize = (100,100))
     for i, im in enumerate(images):
         # img = iter(testloader).next()[0][0].to(device)
         pltImages = []
@@ -196,7 +196,7 @@ def getGradCamOutput(modelClass, modelType, modelPath, target_layer, images, tit
         # sub = fig3.add_subplot(len(images), 3, (i*3)+2)
         # plt.imshow(heatmap.permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
         # sub.set_title("Heat Map")
-        sub = fig3.add_subplot(5, 5, i+1)
+        sub = fig3.add_subplot(25, 1, i+1)
         plt.imshow(make_grid(pltImages).permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
         sub.set_title(titles[i])
     plt.tight_layout()
