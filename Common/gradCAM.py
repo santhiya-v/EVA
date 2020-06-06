@@ -2,6 +2,7 @@ import torch
 import cv2
 import torch.nn.functional as F
 from torchvision import transforms
+from torchvision.utils import make_grid
 import matplotlib.pyplot as plt
 
 class GradCAM:
@@ -173,27 +174,30 @@ def find_resnet_layer(arch, target_layer_name):
     return target_layer    
     
 
-def getGradCamOutput(modelClass, modelType, modelPath, target_layer, testloader, device, no_of_output=5):
+def getGradCamOutput(modelClass, modelType, modelPath, target_layer, images, titles):
     model = modelClass
     model.load_state_dict(torch.load(modelPath))
     model.cuda()
     model.eval()
     gradcam = GradCAM.from_config(model_type=modelType, arch=model, layer_name=target_layer)
     
-    fig3 = plt.figure(figsize = (15,15))
-    for i in range(no_of_output):
-        img = iter(testloader).next()[0][0].to(device)
+    fig3 = plt.figure(figsize = (35,20))
+    for i, im in enumerate(images):
+        # img = iter(testloader).next()[0][0].to(device)
+        pltImages = []
+        img = im[0]
         normed_torch_img = transforms.Normalize([0.5,0.5,0.5], [0.5,0.5,0.5])(img)[None]
         mask, _ = gradcam(normed_torch_img)
         heatmap, result = visualize_cam(mask, img)
-        sub = fig3.add_subplot(no_of_output+1, 3, (i*3)+1)
-        plt.imshow(img.permute(1, 2, 0).cpu().numpy().squeeze(), cmap='gray_r',interpolation='none')
-        sub.set_title("Original Image")
-        sub = fig3.add_subplot(no_of_output+1, 3, (i*3)+2)
-        plt.imshow(heatmap.permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
-        sub.set_title("Heat Map")
-        sub = fig3.add_subplot(no_of_output+1, 3, (i*3)+3)
-        plt.imshow(result.permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
-        sub.set_title("GradCam output")
+        pltImages.extend([img.cpu(), heatmap, result])
+        # sub = fig3.add_subplot(len(images), 3, (i*3)+1)
+        # plt.imshow(img.permute(1, 2, 0).cpu().numpy().squeeze(), cmap='gray_r',interpolation='none')
+        # sub.set_title(titles[i])
+        # sub = fig3.add_subplot(len(images), 3, (i*3)+2)
+        # plt.imshow(heatmap.permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
+        # sub.set_title("Heat Map")
+        sub = fig3.add_subplot(5, 5, i+1)
+        plt.imshow(make_grid(pltImages).permute(1, 2, 0).numpy().squeeze(), cmap='gray_r',interpolation='none')
+        sub.set_title(titles[i])
     plt.tight_layout()
     plt.show()

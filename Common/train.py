@@ -5,9 +5,10 @@ import torch
 
 train_losses = []
 train_acc = []
+running_loss = 0.0
 
-def getOptimizer(model, lr=0.001, weight_decay=0):
-  optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=weight_decay)
+def getOptimizer(model, lr=0.001, momentum=0.9, weight_decay=0):
+  optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)
   return optimizer
   
 
@@ -21,39 +22,41 @@ def L1_Loss(model, loss, l1_factor=0.0005):
     loss += l1_factor * reg_loss
     return loss
 
-def train(model, device, train_loader, optimizer, l1_factor=0):
+def train(model, device, train_loader, optimizer, criterion, l1_factor=0):
   model.train()
   pbar = tqdm(train_loader)
   correct = 0
   processed = 0
+  running_loss = 0.0
   for batch_idx, (data, target) in enumerate(pbar):
-    # get samples
-    data, target = data.to(device), target.to(device)
+      # get samples
+      data, target = data.to(device), target.to(device)
 
-    # Init
-    optimizer.zero_grad()
-    # In PyTorch, we need to set the gradients to zero before starting to do backpropragation because PyTorch accumulates the gradients on subsequent backward passes. 
-    # Because of this, when you start your training loop, ideally you should zero out the gradients so that you do the parameter update correctly.
+      # Init
+      optimizer.zero_grad()
+      # In PyTorch, we need to set the gradients to zero before starting to do backpropragation because PyTorch accumulates the gradients on subsequent backward passes. 
+      # Because of this, when you start your training loop, ideally you should zero out the gradients so that you do the parameter update correctly.
 
-    # Predict
-    y_pred = model(data)
+      # Predict
+      y_pred = model(data)
 
-    # Calculate loss
-    criterion = nn.CrossEntropyLoss()
-    loss = criterion(y_pred, target)
-    if l1_factor:
-      loss = L1_Loss(model, loss)
-    train_losses.append(loss)
+      # Calculate loss
+      loss = criterion(y_pred, target)
+      if l1_factor:
+        loss = L1_Loss(model, loss)
+      running_loss += loss.item()
+      train_losses.append(loss.item())
 
-    # Backpropagation
-    loss.backward()
-    optimizer.step()
+      # Backpropagation
+      loss.backward()
+      optimizer.step()
 
-    # Update pbar-tqdm
-    
-    pred = y_pred.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-    correct += pred.eq(target.view_as(pred)).sum().item()
-    processed += len(data)
+      # Update pbar-tqdm
+      
+      pred = y_pred.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+      correct += pred.eq(target.view_as(pred)).sum().item()
+      processed += len(data)
 
-    pbar.set_description(desc= f'Loss={loss.item()} Batch_id={batch_idx} Accuracy={100*correct/processed:0.2f}')
-    train_acc.append(100*correct/processed)
+      # print('Running loss : ', running_loss)
+      pbar.set_description(desc= f'Loss={loss.item()} Batch_id={batch_idx} Accuracy={100*correct/processed:0.2f}')
+      train_acc.append(100*correct/processed)
