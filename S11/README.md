@@ -14,3 +14,17 @@
 1. Accuracy Achieved - 90%
 2. LR Max - 0.02, LR Min - 0.002
 
+## Cyclic Triangle
+![Cyclic triangle](https://github.com/santhiya-v/EVA/blob/master/S11/curve.png)
+
+## Accuracy vs Learning Rate
+![Acc LR](https://github.com/santhiya-v/EVA/blob/master/S11/acc_lr.png)
+
+## Train and Test Accuracy
+![train test accuracy](https://github.com/santhiya-v/EVA/blob/master/S11/train_test_acc.png)
+
+## Misclassified Images
+![Misclassified](https://github.com/santhiya-v/EVA/blob/master/S11/misclassified.png)
+
+## GradCam Output
+![Grad Cam](https://github.com/santhiya-v/EVA/blob/master/S11/gradCam.png)
