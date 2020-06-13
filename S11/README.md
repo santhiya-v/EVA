@@ -11,7 +11,7 @@
 4. Target accuracy - 90%
 
 ## Result
-1. Accuracy Achieved - 90%
+1. Accuracy Achieved - Train : 90.77%, Test : 85.40%
 2. LR Max - 0.02, LR Min - 0.002
 
 ## Cyclic Triangle
