@@ -16,10 +16,7 @@
 
 
 ## Train and Test Accuracy
-![train test accuracy](https://github.com/santhiya-v/EVA/blob/master/S9/validation_loss.png)
-
-## Train and Test Loss
-![train test loss](https://github.com/santhiya-v/EVA/blob/master/S9/validation_accuracy.png)
+![train test accuracy](https://github.com/santhiya-v/EVA/blob/master/S10/train_test_accuracy.png)
 
 ## GradCam Output on 25 Misclassified Images
 ![gradcam images](https://github.com/santhiya-v/EVA/blob/master/S10/gradcam.png)
