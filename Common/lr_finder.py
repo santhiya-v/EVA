@@ -128,7 +128,7 @@ class LRFinder(object):
 
         self.model = model
         self.criterion = criterion
-        self.history = {"lr": [], "loss": []}
+        self.history = {"lr": [], "loss": [], "accuracy":[]}
         self.best_loss = None
         self.memory_cache = memory_cache
         self.cache_dir = cache_dir
@@ -164,7 +164,8 @@ class LRFinder(object):
         smooth_f=0.05,
         diverge_th=5,
         accumulation_steps=1,
-        non_blocking_transfer=True
+        non_blocking_transfer=True,
+        accuracy=False
     ):
         """Performs the learning rate range test.
 
@@ -238,7 +239,7 @@ class LRFinder(object):
         """
 
         # Reset test results
-        self.history = {"lr": [], "loss": []}
+        self.history = {"lr": [], "loss": [], "accuracy":[]}
         self.best_loss = None
 
         # Move the model to the proper device
@@ -284,7 +285,7 @@ class LRFinder(object):
 
         for iteration in tqdm(range(num_iter)):
             # Train on batch and retrieve loss
-            loss = self._train_batch(
+            loss, accuracy = self._train_batch(
                 train_iter,
                 accumulation_steps,
                 non_blocking_transfer=non_blocking_transfer,
@@ -309,9 +310,11 @@ class LRFinder(object):
 
             # Check if the loss has diverged; if it has, stop the test
             self.history["loss"].append(loss)
-            if loss > diverge_th * self.best_loss:
-                print("Stopping early, the loss has diverged")
-                break
+            self.history["accuracy"].append(accuracy)
+            if not accuracy:
+                if loss > diverge_th * self.best_loss:
+                    print("Stopping early, the loss has diverged")
+                    break
 
         print("Learning rate search finished. See the graph with {finder_name}.plot()")
 
@@ -337,6 +340,9 @@ class LRFinder(object):
     ):
         self.model.train()
         total_loss = None  # for late initialization
+        total_acc = None
+        correct = 0
+        processed = 0
 
         self.optimizer.zero_grad()
         for i in range(accumulation_steps):
@@ -370,9 +376,18 @@ class LRFinder(object):
             else:
                 total_loss += loss
 
-        self.optimizer.step()
+            pred = outputs.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+            correct += pred.eq(labels.view_as(pred)).sum().item()
+            processed += len(inputs)
 
-        return total_loss.item()
+            if total_acc is None:
+                total_acc = 100*correct/processed
+            else:
+                total_acc += 100*correct/processed
+
+        self.optimizer.step()
+    
+        return total_loss.item(), total_acc/accumulation_steps
 
     def _move_to_device(self, inputs, labels, non_blocking=True):
         def move(obj, device, non_blocking=True):
@@ -473,6 +488,60 @@ class LRFinder(object):
             plt.show()
 
         return ax
+
+    def plot_acc(self, skip_start=10, skip_end=5, log_lr=True, show_lr=None, ax=None):
+            """Plots the learning rate range test.
+
+            Arguments:
+                skip_start (int, optional): number of batches to trim from the start.
+                    Default: 10.
+                skip_end (int, optional): number of batches to trim from the start.
+                    Default: 5.
+                log_lr (bool, optional): True to plot the learning rate in a logarithmic
+                    scale; otherwise, plotted in a linear scale. Default: True.
+                show_lr (float, optional): if set, adds a vertical line to visualize the
+                    specified learning rate. Default: None.
+                ax (matplotlib.axes.Axes, optional): the plot is created in the specified
+                    matplotlib axes object and the figure is not be shown. If `None`, then
+                    the figure and axes object are created in this method and the figure is
+                    shown . Default: None.
+
+            Returns:
+                The matplotlib.axes.Axes object that contains the plot.
+            """
+
+            if skip_start < 0:
+                raise ValueError("skip_start cannot be negative")
+            if skip_end < 0:
+                raise ValueError("skip_end cannot be negative")
+            if show_lr is not None and not isinstance(show_lr, float):
+                raise ValueError("show_lr must be float")
+
+            # Get the data to plot from the history dictionary. Also, handle skip_end=0
+            # properly so the behaviour is the expected
+            lrs = self.history["lr"]
+            accuracy = self.history["accuracy"]
+            
+            # Create the figure and axes object if axes was not already given
+            fig = None
+            if ax is None:
+                fig, ax = plt.subplots()
+
+            # Plot loss as a function of the learning rate
+            ax.plot(lrs, accuracy)
+            if log_lr:
+                ax.set_xscale("log")
+            ax.set_xlabel("Learning rate")
+            ax.set_ylabel("Accuracy")
+
+            if show_lr is not None:
+                ax.axvline(x=show_lr, color="red")
+
+            # Show only if the figure was created internally
+            if fig is not None:
+                plt.show()
+
+            return ax
 
 
 class LinearLR(_LRScheduler):
