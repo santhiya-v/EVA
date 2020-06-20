@@ -11,8 +11,17 @@
 4. Target accuracy - 90%
 
 ## Result
-1. Accuracy Achieved - Train : 90.77%, Test : 85.40%
-2. LR Max - 0.02, LR Min - 0.002
+1. Accuracy Achieved - Train : 98.51%, Test : 92.10%
+2. LR Max - 0.046, LR Min - 0.00575
+
+## Other Experiments
+Max LR : 0.046
+
+*   Min LR : 0.046/5 ==> Acc : 91.57
+*   Min LR : 0.046/6 ==> Acc : 91.43
+*   Min LR : 0.046/7 ==> Acc : 91.59
+*   Min LR : 0.046/8 ==> Acc : 92.10
+*   Min LR : 0.046/10 ==> Acc : 91.7
 
 ## Cyclic Triangle
 ![Cyclic triangle](https://github.com/santhiya-v/EVA/blob/master/S11/curve.png)
