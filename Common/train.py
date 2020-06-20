@@ -22,7 +22,7 @@ def L1_Loss(model, loss, l1_factor=0.0005):
     loss += l1_factor * reg_loss
     return loss
 
-def train(model, device, train_loader, optimizer, criterion, l1_factor=0):
+def train(model, device, train_loader, optimizer, criterion, l1_factor=0, scheduler=None):
   model.train()
   pbar = tqdm(train_loader)
   correct = 0
@@ -51,8 +51,10 @@ def train(model, device, train_loader, optimizer, criterion, l1_factor=0):
       loss.backward()
       optimizer.step()
 
+      if scheduler:
+        scheduler.step()
+
       # Update pbar-tqdm
-      
       pred = y_pred.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
       correct += pred.eq(target.view_as(pred)).sum().item()
       processed += len(data)

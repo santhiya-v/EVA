@@ -241,6 +241,7 @@ class LRFinder(object):
         # Reset test results
         self.history = {"lr": [], "loss": [], "accuracy":[]}
         self.best_loss = None
+        self.best_acc = None
 
         # Move the model to the proper device
         self.model.to(self.device)
@@ -285,7 +286,7 @@ class LRFinder(object):
 
         for iteration in tqdm(range(num_iter)):
             # Train on batch and retrieve loss
-            loss, accuracy = self._train_batch(
+            loss, curr_accuracy = self._train_batch(
                 train_iter,
                 accumulation_steps,
                 non_blocking_transfer=non_blocking_transfer,
@@ -302,15 +303,18 @@ class LRFinder(object):
             # Track the best loss and smooth it if smooth_f is specified
             if iteration == 0:
                 self.best_loss = loss
+                self.best_acc = curr_accuracy
             else:
                 if smooth_f > 0:
                     loss = smooth_f * loss + (1 - smooth_f) * self.history["loss"][-1]
                 if loss < self.best_loss:
                     self.best_loss = loss
+                if curr_accuracy > self.best_acc:
+                    self.best_acc = curr_accuracy
 
             # Check if the loss has diverged; if it has, stop the test
             self.history["loss"].append(loss)
-            self.history["accuracy"].append(accuracy)
+            self.history["accuracy"].append(curr_accuracy)
             if not accuracy:
                 if loss > diverge_th * self.best_loss:
                     print("Stopping early, the loss has diverged")
@@ -387,7 +391,7 @@ class LRFinder(object):
 
         self.optimizer.step()
     
-        return total_loss.item(), total_acc/accumulation_steps
+        return total_loss.item(), total_acc
 
     def _move_to_device(self, inputs, labels, non_blocking=True):
         def move(obj, device, non_blocking=True):

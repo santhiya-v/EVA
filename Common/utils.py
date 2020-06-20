@@ -1,11 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+from torchvision.utils import make_grid
 
-def imshow(img):
+def imshow(img, title=None):
     img = img / 2 + 0.5     # unnormalize
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    plt.title(title)
 
 def getDevice():
   use_cuda = torch.cuda.is_available()
@@ -51,3 +53,12 @@ def plotMisclassifiedImages(misclassifiedImages, classes, noOfImages=25):
 
 def saveModel(model, modelPath):
   torch.save(model.state_dict(), modelPath)
+
+
+def showFewDataSetImages(loader, noOfImages=10):
+  image, label = iter(loader).next()
+  img = make_grid(image[0:noOfImages])
+  img = img / 2 + 0.5     # unnormalize
+  npimg = img.numpy()
+  fig = plt.figure(figsize=(10,10))
+  plt.imshow(np.transpose(npimg, (1, 2, 0)))
