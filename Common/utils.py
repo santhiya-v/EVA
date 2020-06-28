@@ -3,8 +3,8 @@ import numpy as np
 import torch
 from torchvision.utils import make_grid
 
-def imshow(img, title=None):
-    img = img / 2 + 0.5     # unnormalize
+def imshow(img, title=None, normalizeVal=0.5):
+    img = img / 2 + normalizeVal     # unnormalize
     npimg = img.numpy()
     plt.imshow(np.transpose(npimg, (1, 2, 0)))
     plt.title(title)
@@ -55,10 +55,22 @@ def saveModel(model, modelPath):
   torch.save(model.state_dict(), modelPath)
 
 
-def showFewDataSetImages(loader, noOfImages=10):
+def showFewDataSetImages(loader, noOfImages=10, normalizeVal=0.5):
   image, label = iter(loader).next()
   img = make_grid(image[0:noOfImages])
-  img = img / 2 + 0.5     # unnormalize
+  img = img / 2 + normalizeVal     # unnormalize
   npimg = img.numpy()
   fig = plt.figure(figsize=(10,10))
   plt.imshow(np.transpose(npimg, (1, 2, 0)))
+
+def getTinyImageNetWordClasses(wordsPath, classes):
+  url = wordsPath
+  f = open(url, "r")
+  words = [None] * 200
+  for line in f:
+    wordclass = line.strip('\n').split('\t')[0]
+
+    if wordclass in classes:
+      i = classes.index(line.strip('\n').split('\t')[0])
+      words[i] = line.strip('\n').split('\t')[1]
+  return words
