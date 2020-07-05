@@ -66,6 +66,6 @@ jerry
 
 ## Prediction of YoloV3 trained model (for object Jerry) on Video
 
-https://youtu.be/qThk9ynBd_M
-https://youtu.be/-81RADbDCtc
+1. https://youtu.be/qThk9ynBd_M
+2. tps://youtu.be/-81RADbDCtc
 
