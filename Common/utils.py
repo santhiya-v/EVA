@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 from torchvision.utils import make_grid
+from textwrap import wrap
 
 def imshow(img, title=None, normalizeVal=0.5):
     img = img / 2 + normalizeVal     # unnormalize
@@ -15,11 +16,11 @@ def getDevice():
   return device
 
 def showImages(images, titles):
-  fig3 = plt.figure(figsize = (15,15))
+  fig3 = plt.figure(figsize = (25,15))
   for i, im in enumerate(images):
       sub = fig3.add_subplot(5, 5, i+1)
       plt.imshow(im[0].permute(1, 2, 0).cpu().numpy().squeeze(), cmap='gray_r',interpolation='none')
-      sub.set_title(titles[i])
+      sub.set_title("\n".join(wrap(titles[i])))
   plt.tight_layout()
   plt.show()
 
