@@ -10,7 +10,7 @@ layer_names = net.getLayerNames()
 output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
 
 # Loading image
-img = cv2.imread("h.JPG")
+img = cv2.imread("me.jpg")
 img = cv2.resize(img, None, fx=0.4, fy=0.4)
 height, width, channels = img.shape
 
