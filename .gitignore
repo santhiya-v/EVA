@@ -1,3 +1,10 @@
 data/
 .ipynb_checkpoints/
 __pycache__
+*.weights
+tiny-imagenet-200/
+S13/YoloV3_Annotation_Tool/Images/
+S13/YoloV3_Annotation_Tool/Labels/
+S13/yolo_custom_training/
+*.pt
+*.zip
