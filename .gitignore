@@ -8,3 +8,14 @@ S13/YoloV3_Annotation_Tool/Labels/
 S13/yolo_custom_training/
 *.pt
 *.zip
+S15_prep/
+
+
+/__pycache__
+/models
+/*.h5
+/*.zip
+/.vscode
+*.jpg
+*.obj
+*.mp4
