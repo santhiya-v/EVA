@@ -1,6 +1,8 @@
 
 # GDrive link for the dataset
 
+https://drive.google.com/drive/folders/1xs2mlCry-5iEAXA-sRQMnmqK-2QjdzDQ
+
 # Dataset Statistics
 
 ## Kinds of images 
@@ -21,19 +23,14 @@ depth | jpg | 1 | 224*224
 * depth - 400000
 
 ## Total size of the dataset
+4 GB
 
 ## Mean/STD values 
-* fg_bg 
-Mean - [0.5445, 0.5092, 0.4564]
-STD - [0.2265, 0.2253, 0.2360]
-
-* masks 
-Mean - [0.0571]
-STD - [0.2165]
-
-* depth images
-Mean - [0.4385]
-STD - [0.2491]
+Image | Mean | STD
+----- | ---- | ----
+fg_bg | [0.5445, 0.5092, 0.4564] | [0.2265, 0.2253, 0.2360]
+masks | [0.0571] | [0.2165]
+depth images | [0.4385] | [0.2491]
 
 # Dataset Images
 
