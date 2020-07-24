@@ -1,3 +1,37 @@
+
+# GDrive link for the dataset
+
+# Dataset Statistics
+
+## Kinds of images 
+* fg - png, 4 channel images, Dim - 112*112
+* bg - jpg, 3 channel images, Dim - 224*224
+* fg_bg - jpg, 3 channel images, Dim - 224*224
+* masks - jpg, 1 channel images, Dim - 224*224
+* depth - jpg, 1 channel images, Dim - 224*224
+
+## Total images of each kind
+* fg - 100
+* bg - 100
+* fg_bg - 400000
+* masks - 400000
+* depth - 400000
+
+## Total size of the dataset
+
+## Mean/STD values 
+* fg_bg 
+Mean - [0.5445, 0.5092, 0.4564]
+STD - [0.2265, 0.2253, 0.2360]
+
+* masks 
+Mean - [0.0571]
+STD - [0.2165]
+
+* depth images
+Mean - [0.4385]
+STD - [0.2491]
+
 # Dataset Images
 
 ## Background
@@ -17,3 +51,6 @@
 
 ## Depth Images
 ![Depth](https://github.com/santhiya-v/EVA/blob/master/S15/A/dataset_sample/depth.png?raw=true)
+
+## How dataset was prepared?
+
