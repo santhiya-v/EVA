@@ -4,11 +4,14 @@
 # Dataset Statistics
 
 ## Kinds of images 
-* fg - png, 4 channel images, Dim - 112*112
-* bg - jpg, 3 channel images, Dim - 224*224
-* fg_bg - jpg, 3 channel images, Dim - 224*224
-* masks - jpg, 1 channel images, Dim - 224*224
-* depth - jpg, 1 channel images, Dim - 224*224
+
+Image | Type | Channels | Dimension
+----- | ---- | -------- | ---------
+fg | png | 4 | 112*112
+bg | jpg | 3 | 224*224
+fg_bg | jpg | 3 | 224*224
+masks | jpg | 1 | 224*224
+depth | jpg | 1 | 224*224
 
 ## Total images of each kind
 * fg - 100
