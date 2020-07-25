@@ -54,3 +54,39 @@ depth images | [0.4385] | [0.2491]
 
 ## How dataset was prepared?
 
+* 100 background images were collected
+* 100 foreground images were collected. Prefrerred white background and png with transparent background
+* Foreground images with white background was made transparent, using GIMP tool
+  Steps :
+    * Open the image in GIMP
+    * Select Fuzzy Select Tool and click on white area of the image
+    * To add alpha channel - Click on Layer --> Transparency --> Add Alpha Channel 
+    * To make white color as transparent - Click on Layer --> Transparency --> Color to alpha --> (Make sure white color is choose in pop-up) --> click OK
+    * Now all the white area would have been converted to transparent. Save/Export the image
+* Foreground mask was prepared by using opencv.  
+    * Alpha (4th) channel of FG alone is created as separate 1 channel mask image. 
+* FG BG Preparation
+    * OpenCV was used
+    * FG is overlaid on BG, at (x,y) of BG, using following code :
+      ```
+      def overlay_transparent(background, overlay, x, y):
+            h, w = overlay.shape[0], overlay.shape[1]
+
+            overlay_image = overlay[..., :3]   # First 3 Channel BGR is used as overlay
+            mask = overlay[..., 3:] / 255.0    # Fourth channel of overlay is used as mask
+
+            background[y:y+h, x:x+w] = (1.0 - mask) * background[y:y+h, x:x+w] + mask * overlay_image
+
+            return background
+       ```
+    * For one BG, 
+        * one FG is taken, and 20 random co-ordinates was generated with in the BG bounds
+        * over_transparent() method is called for each random co-ordinate, and 20 resulting images are saved
+        * FG is then fliped, using opencv, and again the above 2 steps are repeated and 20 images are saved
+        * The process is repeated for all FG. At the end, we had 4000 images generated for one BG.
+    * Above step was repeated for all 100 BGs and we had 400K images ready
+    * Files were written to zip, for easy access. Zip file had 100 folders, where each folder corresponds to 1 BG with 4000 images
+    * Complete code can be found here : https://github.com/santhiya-v/EVA/blob/master/S15/A/DatasetPrep_S15.ipynb
+    
+ * Dense Depth Images Preparation
+    
