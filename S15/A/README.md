@@ -12,15 +12,17 @@ Image | Type | Channels | Dimension
 fg | png | 4 | 112*112
 bg | jpg | 3 | 224*224
 fg_bg | jpg | 3 | 224*224
-masks | jpg | 1 | 224*224
+fg_bg_masks | jpg | 1 | 224*224
 depth | jpg | 1 | 224*224
 
 ## Total images of each kind
-* fg - 100
-* bg - 100
-* fg_bg - 400000
-* masks - 400000
-* depth - 400000
+Image | Count
+----- | -----
+ fg | 100
+ bg | 100
+ fg_bg | 400000
+ fg_bg_masks | 400000
+ depth | 400000
 
 ## Total size of the dataset
 4 GB
@@ -29,7 +31,7 @@ depth | jpg | 1 | 224*224
 Image | Mean | STD
 ----- | ---- | ----
 fg_bg | [0.5445, 0.5092, 0.4564] | [0.2265, 0.2253, 0.2360]
-masks | [0.0571] | [0.2165]
+fg_bg_masks | [0.0571] | [0.2165]
 depth images | [0.4385] | [0.2491]
 
 # Dataset Images
@@ -56,7 +58,7 @@ depth images | [0.4385] | [0.2491]
 
 * 100 background images were collected
 * 100 foreground images were collected. Prefrerred white background and png with transparent background
-* Foreground images with white background was made transparent, using GIMP tool
+* Foreground images with white background was made transparent, using GIMP tool. 
   Steps :
     * Open the image in GIMP
     * Select Fuzzy Select Tool and click on white area of the image
@@ -81,12 +83,12 @@ depth images | [0.4385] | [0.2491]
        ```
     * For one BG, 
         * one FG is taken, and 20 random co-ordinates was generated with in the BG bounds
-        * over_transparent() method is called for each random co-ordinate, and 20 resulting images are saved
+        * overlay_transparent() method is called for each random co-ordinate, and 20 resulting images are saved
         * FG is then fliped, using opencv, and again the above 2 steps are repeated and 20 images are saved
         * The process is repeated for all FG. At the end, we had 4000 images generated for one BG.
     * Above step was repeated for all 100 BGs and we had 400K images ready
     * Files were written to zip, for easy access. Zip file had 100 folders, where each folder corresponds to 1 BG with 4000 images
-    * Complete code can be found here : https://github.com/santhiya-v/EVA/blob/master/S15/A/DatasetPrep_S15.ipynb
+    * Code : https://github.com/santhiya-v/EVA/blob/master/S15/A/DatasetPrep_S15.ipynb
     
  * Dense Depth Images Preparation
     * When we ran the model for the fg_bg images, prediction was not good, since all our FGs were either subtle or blending with background.
