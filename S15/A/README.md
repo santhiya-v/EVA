@@ -25,7 +25,7 @@ Image | Count
  depth | 400000
 
 ## Total size of the dataset
-4 GB
+4.8 GB
 
 ## Mean/STD values 
 Image | Mean | STD
