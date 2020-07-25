@@ -67,7 +67,7 @@ depth images | [0.4385] | [0.2491]
     * Now all the white area would have been converted to transparent. Save/Export the image
 * Foreground mask was prepared by using opencv.  
     * Alpha (4th) channel of FG alone is created as separate 1 channel mask image. 
-* FG BG Preparation
+* **FG BG Preparation**
     * OpenCV was used
     * FG is overlaid on BG, at (x,y) of BG, using following code :
       ```
@@ -90,7 +90,7 @@ depth images | [0.4385] | [0.2491]
     * Files were written to zip, for easy access. Zip file had 100 folders, where each folder corresponds to 1 BG with 4000 images
     * Code : https://github.com/santhiya-v/EVA/blob/master/S15/A/DatasetPrep_S15.ipynb
     
- * Dense Depth Images Preparation
+ * **Dense Depth Images Preparation**
     * When we ran the model for the fg_bg images, prediction was not good, since all our FGs were either subtle or blending with background.
     * Hence sharpened the FGs, before FG BG image dataset was prepared
     * Dense depth load_images code was modified to read images from Zip directly
@@ -124,7 +124,7 @@ depth images | [0.4385] | [0.2491]
     * For one folder with 4000 images, it took aroung ~6 mins and so we happened to have patience for 10 long hours, to see the final dataset with 400K depth images
     * All the modifications done in dense depth can be found here : https://github.com/santhiya-v/DenseDepth
     
- * Dataset Statistics :
+ * **Dataset Statistics** 
       * Wrote a custom Zip dataset loader, using pytorch, to read the images
       * Images where read in batch of 8, mean and std where calculated
       * Code : https://github.com/santhiya-v/EVA/blob/master/S15/A/MeanStd_DataSet.ipynb
