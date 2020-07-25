@@ -1,7 +1,7 @@
 
 # GDrive link for the dataset
 
-https://drive.google.com/drive/folders/1xs2mlCry-5iEAXA-sRQMnmqK-2QjdzDQ
+https://drive.google.com/drive/folders/1DBh_ddxqC7f__luOUQ0WI49kCzPekRV8?usp=sharing
 
 # Dataset Statistics
 
